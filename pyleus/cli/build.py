@@ -6,10 +6,11 @@ object. The caller function should handle PyleusError exceptions.
 from __future__ import absolute_import
 
 import glob
-import re
-import tempfile
+import logging
 import os
+import re
 import shutil
+import tempfile
 import yaml
 import zipfile
 
@@ -26,6 +27,8 @@ RESOURCES_PATH = "resources"
 YAML_FILENAME = "pyleus_topology.yaml"
 DEFAULT_REQUIREMENTS_FILENAME = "requirements.txt"
 VIRTUALENV_NAME = "pyleus_venv"
+
+log = logging.getLogger(__name__)
 
 
 def _open_jar(base_jar):
@@ -73,13 +76,29 @@ def _validate_venv(topology_dir, venv):
                                    "file named {0}".format(venv))
 
 
+def _path_contained_by(containing_path, path):
+    """Return whether path is a subpath of containing_path"""
+    # Call to os.path.join adds a trailing separator to real_containing_path
+    # without which os.path.commonprefix can be unreliable.
+    real_containing_path = os.path.join(os.path.realpath(containing_path), '')
+    real_path = os.path.realpath(path)
+    common_prefix = os.path.commonprefix([real_containing_path, real_path])
+    return common_prefix == real_containing_path
+
+
 def _remove_pyleus_base_jar(venv):
     """Remove the Pyleus base jar from the virtualenv since it's redundant and
     takes up space. See PYLEUS-74.
+
+    This function verifies that base_jar_path is actually inside the virtualenv
+    before removing it. If the user is using --system-site-packages and has
+    pyleus installed on their system, base_jar_path is actually outside the
+    virtualenv, and we don't want to attempt its removal in that case.
     """
     base_jar_path = venv.execute_module("pyleus._base_jar",
                                         cwd=venv.path).strip()
-    os.remove(base_jar_path)
+    if _path_contained_by(venv.path, base_jar_path):
+        os.remove(base_jar_path)
 
 
 def _set_up_virtualenv(venv_name, tmp_dir, req,
@@ -117,6 +136,7 @@ def _assemble_full_topology_yaml(spec, venv, resources_dir):
     """
     for component in spec.topology:
         if component.type == "python":
+            log.debug('Assemble component module: {0}'.format(component.module))
             description = venv.execute_module(module=component.module,
                                               args=[DESCRIBE_OPT],
                                               cwd=resources_dir)
