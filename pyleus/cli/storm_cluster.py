@@ -11,7 +11,8 @@ from pyleus.exception import ConfigurationError
 from pyleus.exception import StormError
 
 
-TOPOLOGY_BUILDER_CLASS = "com.yelp.pyleus.PyleusTopologyBuilder"
+#TOPOLOGY_BUILDER_CLASS = "com.yelp.pyleus.PyleusTopologyBuilder"
+TOPOLOGY_BUILDER_CLASS = "com.w2gi.pyleus.PyleusTopologyBuilder"
 LOCAL_OPTION = "--local"
 DEBUG_OPTION = "--debug"
 STORM_JAR_JVM_OPTS = "STORM_JAR_JVM_OPTS"

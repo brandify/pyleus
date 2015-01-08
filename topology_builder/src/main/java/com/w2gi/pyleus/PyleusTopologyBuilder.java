@@ -277,11 +277,33 @@ public class PyleusTopologyBuilder {
         }
     }
 
-    private static void runLocally(final String topologyName, final StormTopology topology, boolean debug, final String serializer) {
+    private static void runLocally(final String topologyName, final StormTopology topology, boolean debug, final String serializer,
+            final TopologySpec spec) {
         Config conf = new Config();
         setSerializer(conf, serializer);
         conf.setDebug(debug);
         conf.setMaxTaskParallelism(1);
+        
+
+        if (spec.max_shellbolt_pending != -1) {
+            conf.put(Config.TOPOLOGY_SHELLBOLT_MAX_PENDING, spec.max_shellbolt_pending);
+        }
+
+        if (spec.workers != -1) {
+            conf.setNumWorkers(spec.workers);
+        }
+
+        if (spec.max_spout_pending != -1) {
+            conf.setMaxSpoutPending(spec.max_spout_pending);
+        }
+
+        if (spec.message_timeout_secs != -1) {
+            conf.setMessageTimeoutSecs(spec.message_timeout_secs);
+        }
+
+        if (spec.ackers != -1) {
+            conf.setNumAckers(spec.ackers);
+        }
 
         final LocalCluster cluster = new LocalCluster();
 
@@ -352,7 +374,7 @@ public class PyleusTopologyBuilder {
         StormTopology topology = buildTopology(spec);
 
         if (runLocally) {
-            runLocally(spec.name, topology, debug, spec.serializer);
+            runLocally(spec.name, topology, debug, spec.serializer, spec);
         } else {
             Config conf = new Config();
             conf.setDebug(false);
