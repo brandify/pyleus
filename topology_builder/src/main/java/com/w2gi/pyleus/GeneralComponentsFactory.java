@@ -17,7 +17,7 @@ public class GeneralComponentsFactory {
             final String loggingConfig, final String serializerConfig) {
         //List<String> command = new ArrayList<String>();
         //String[] command = { type, module };
-        String[] command = new String[3];
+        String[] command = new String[4];
         //command.add(type);
         //command.add(module);
         command[0] = type;
@@ -26,10 +26,12 @@ public class GeneralComponentsFactory {
         if (argumentsMap != null) {
             Gson gson = new GsonBuilder().create();
             String json = gson.toJson(argumentsMap);
-            json = json.replace("\"", "\\\"");
-            command[2] = String.format(" --options \"%s\"", json);
+            //json = json.replace("\"", "\\\"");
+            command[2] = "--options";
+            command[3] = json; //String.format("\"%s\"", json);
         } else {
             command[2] = "";
+            command[3] = "";
         }
         
         //return command.toArray(new String[1]);
