@@ -3,7 +3,7 @@ Pyleus
 
 Pyleus is a Python 2.6+ framework for developing and launching `Apache Storm`_ topologies.
 
-Please visit our `wiki`_.
+Please visit our `documentation`_.
 
 ===============  ================
     master           develop
@@ -46,6 +46,8 @@ From PyPI:
 **Note:**
 
 You do **NOT** need to install pyleus on your Storm cluster. That’s cool, isn't it?
+
+However, if you are going to use ``system_site_packages: true`` in your config file, you should be aware that the environment of your Storm nodes needs to match the one on the machine used for building the topology. This means you actually **have to install** pyleus on your Storm cluster in this case.
 
 Try it out!
 -----------
@@ -102,7 +104,7 @@ Try ``pyleus -h`` for a list of all the available commands or ``pyleus CMD -h`` 
 Write your first topology
 -------------------------
 
-Please refer to the `wiki`_ for a more detailed tutorial.
+Please refer to the `documentation`_ for a more detailed tutorial.
 
 Organize your files
 ^^^^^^^^^^^^^^^^^^^
@@ -225,5 +227,5 @@ Pyleus is licensed under the Apache License, Version 2.0: http://www.apache.org/
 .. _Apache Storm: https://storm.apache.org/
 .. _Apache Storm Documentation: https://storm.apache.org/documentation/Home.html
 .. _MessagePack: http://msgpack.org/
-.. _wiki: http://yelp.github.io/pyleus/
+.. _documentation: http://pyleus.org/
 .. _examples: https://github.com/Yelp/pyleus/tree/master/examples
