@@ -97,12 +97,12 @@ public class MessagePackSerializer implements ISerializer {
             shellMsg.setMsg(log.asRawValue().getString());
         }
 
-        if (command.equals("log")) {
-            Value logLevelValue = msg.get("level");
-            if (logLevelValue != null) {
-                shellMsg.setLogLevel(logLevelValue.asIntegerValue().getInt());
-            }
-        }
+//        if (command.equals("log")) {
+//            Value logLevelValue = msg.get("level");
+//            if (logLevelValue != null) {
+//                shellMsg.setLogLevel(logLevelValue.asIntegerValue().getInt());
+//            }
+//        }
 
         String stream = Utils.DEFAULT_STREAM_ID;
         Value streamValue = msg.get("stream");

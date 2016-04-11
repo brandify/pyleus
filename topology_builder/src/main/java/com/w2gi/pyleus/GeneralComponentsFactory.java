@@ -17,21 +17,37 @@ public class GeneralComponentsFactory {
             final String loggingConfig, final String serializerConfig) {
         //List<String> command = new ArrayList<String>();
         //String[] command = { type, module };
-        String[] command = new String[4];
+        String file = type;
+        boolean localcmd = type.startsWith("./");
+        String[] command = new String[(localcmd) ? 5 : 4];
+        int idx = 0;
         //command.add(type);
         //command.add(module);
-        command[0] = type;
-        command[1] = module;
+        if (localcmd) {
+            file = type.replaceFirst("\\./", "");
+//            command[idx] = "bash -c ";
+//            idx += 1;
+            command[idx] = String.format("bash -c \"chmod 755 %s\";", file);
+            idx += 1;
+        }
+        command[idx] = file;
+        idx += 1;
+        command[idx] = module;
+        idx += 1;
         
         if (argumentsMap != null) {
             Gson gson = new GsonBuilder().create();
             String json = gson.toJson(argumentsMap);
             //json = json.replace("\"", "\\\"");
-            command[2] = "--options";
-            command[3] = json; //String.format("\"%s\"", json);
+            command[idx] = "--options";
+            idx += 1;
+            command[idx] = json; //String.format("\"%s\"", json);
+            idx += 1;
         } else {
-            command[2] = "";
-            command[3] = "";
+            command[idx] = "";
+            idx += 1;
+            command[idx] = "";
+            idx += 1;
         }
         
         //return command.toArray(new String[1]);
