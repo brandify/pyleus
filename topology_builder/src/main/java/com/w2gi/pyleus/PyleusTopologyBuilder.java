@@ -7,21 +7,21 @@ import java.util.Map;
 
 import org.yaml.snakeyaml.error.YAMLException;
 
-import backtype.storm.Config;
-import backtype.storm.LocalCluster;
-import backtype.storm.StormSubmitter;
-import backtype.storm.generated.StormTopology;
-import backtype.storm.topology.BoltDeclarer;
-import backtype.storm.topology.IRichBolt;
-import backtype.storm.topology.IRichSpout;
-import backtype.storm.topology.SpoutDeclarer;
-import backtype.storm.topology.TopologyBuilder;
-import backtype.storm.tuple.Fields;
-import storm.kafka.KafkaSpout;
-import storm.kafka.KeyValueSchemeAsMultiScheme;
-import storm.kafka.SpoutConfig;
-import storm.kafka.StringKeyValueScheme;
-import storm.kafka.ZkHosts;
+import org.apache.storm.Config;
+import org.apache.storm.LocalCluster;
+import org.apache.storm.StormSubmitter;
+import org.apache.storm.generated.StormTopology;
+import org.apache.storm.topology.BoltDeclarer;
+import org.apache.storm.topology.IRichBolt;
+import org.apache.storm.topology.IRichSpout;
+import org.apache.storm.topology.SpoutDeclarer;
+import org.apache.storm.topology.TopologyBuilder;
+import org.apache.storm.tuple.Fields;
+import org.apache.storm.kafka.KafkaSpout;
+import org.apache.storm.kafka.KeyValueSchemeAsMultiScheme;
+import org.apache.storm.kafka.SpoutConfig;
+import org.apache.storm.kafka.StringKeyValueScheme;
+import org.apache.storm.kafka.ZkHosts;
 
 import com.yelp.pyleus.bolt.PythonBolt;
 import com.yelp.pyleus.spec.BoltSpec;
@@ -209,7 +209,7 @@ public class PyleusTopologyBuilder {
 
         Boolean forceFromStart = (Boolean) spec.options.get("from_start");
         if (forceFromStart != null) {
-            config.forceFromStart = forceFromStart;
+            config.ignoreZkOffsets = forceFromStart; // This probably isn't exactly right
         }
 
         Long startOffsetTime = (Long) spec.options.get("start_offset_time");
